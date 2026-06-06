@@ -121,6 +121,38 @@ verdict**, never the agent's claim.
 
 ## Architecture
 
+```mermaid
+flowchart LR
+    commit([breaking commit]) --> watcher[Watcher<br/>cargo test on HEAD fails]
+
+    subgraph tb [trust boundary]
+        direction TB
+        agent[Agent<br/>read-only · jailed to crate<br/>no shell · no test runner · no key<br/>output: a unified diff only]
+        runner[Runner<br/>holds the Ed25519 private key<br/>clean checkout · runs cargo test<br/>hashes diff + output · verdict = exit code]
+        agent -- diff --> runner
+        runner -- failure log --> agent
+    end
+
+    watcher --> agent
+    runner -- signs --> receipt[(hash-chained receipt<br/>FAIL@HEAD then PASS@fix)]
+    receipt --> slack[Slack briefing<br/>manual approve or auto]
+    slack --> pr[GitHub PR<br/>fix + receipt]
+    receipt --> verifier{{standalone verifier<br/>pinned public key · no Anton imports}}
+    verifier -- valid --> ok[VERIFIED]
+    verifier -- tampered --> no[REJECTED]
+
+    classDef boundary fill:#fafafa,stroke:#111,stroke-width:2px,color:#111;
+    classDef node fill:#fff,stroke:#999,color:#111;
+    classDef good fill:#e7f5e7,stroke:#2e7d32,color:#1b5e20;
+    classDef bad fill:#fdecea,stroke:#c62828,color:#b71c1c;
+    class agent,runner,watcher,receipt,slack,pr,verifier,commit node;
+    class ok good;
+    class no bad;
+    style tb fill:#f4f4f8,stroke:#111,stroke-width:2px,color:#111;
+```
+
+<details><summary>same thing as ASCII</summary>
+
 ```
    breaking commit   WATCHER  cargo test on HEAD -> FAIL        no human
    lands ──────────► (provenance/watcher.py)                    command
@@ -142,6 +174,8 @@ verdict**, never the agent's claim.
               re-derive hashes • check chain • check signature
               ─────────►  VERIFIED ✓   or   TAMPERING DETECTED ✗
 ```
+
+</details>
 
 ---
 
