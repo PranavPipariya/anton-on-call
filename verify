@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Thin launcher so the judge runs:   ./verify receipt.json
+# Uses a Python that has `cryptography`. verify.py itself imports NOTHING from Anton.
+HERE="$(cd "$(dirname "$0")" && pwd)"
+PY="$HERE/.venv/bin/python"
+[ -x "$PY" ] || PY="$(command -v python3)"
+exec "$PY" "$HERE/verify.py" "$@"

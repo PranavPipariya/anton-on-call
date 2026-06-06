@@ -1,0 +1,31 @@
+# Anton dependencies
+
+# Web server
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+
+# HTTP
+httpx>=0.27.0
+python-dotenv>=1.0.0
+
+# Slack
+slack-sdk>=3.27.0
+slack-bolt>=1.18.0        # Socket Mode (live buttons, no public URL/ngrok)
+aiohttp>=3.9.0            # async Socket Mode adapter
+
+# GitHub
+PyGithub>=2.1.1
+
+# Execution-integrity provenance (runner signing + standalone verifier)
+cryptography>=42.0.0
+
+# Core engine (inherited from Godel-main)
+openai>=1.0.0
+pydantic>=2.0.0
+tiktoken>=0.5.0
+rich>=13.0.0
+click>=8.0.0
+duckduckgo-search>=8.0.0
+tomli>=2.0.0
+platformdirs>=4.0.0
+python-multipart>=0.0.9

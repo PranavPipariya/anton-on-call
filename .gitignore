@@ -1,0 +1,35 @@
+# Secrets — never commit
+.env
+
+# Runner signing key — committing this would let anyone forge a green verdict.
+provenance/.keys/
+provenance/.cargo-cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Runtime artifacts
+.oncall_runs/
+*.log
+nohup.out
+
+# Target crate (its own repo: anton-histogram-demo) + receipts
+target_repo/
+receipt.json
+receipt_tampered.json
+receipt_forged.json
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+demo/sample_repo
